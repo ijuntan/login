@@ -25,7 +25,7 @@ const UserSchema = new Schema({
     timestamps: true
 })
 
-UserSchema.pre('save', async function(next){
+UserSchema.pre("save", async function(next){
     try {
         if(!this.isModified('password')){
             return next()

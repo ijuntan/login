@@ -11,6 +11,6 @@ router.get('/', (req, res) => {
 router.post('/signup', signup, userController.signup)
 router.post('/login', userController.login)
 router.post('/forgotpassword', userController.forgotpassword)
-//router.post('/resetpassword', userController.resetpassword)
+router.post('/resetpassword/:resetToken', userController.resetpassword)
 router.get('/dash', isAuthenticated, userController.findByID)
 module.exports = router

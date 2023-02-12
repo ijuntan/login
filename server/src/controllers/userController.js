@@ -27,6 +27,7 @@ module.exports = {
             const userObjJson = user.toJSON();
 
             return res.send({user: userObjJson, token: jwtSignUser(userObjJson)})
+
         } catch(error) {
             //console.log(error)
             if(Object.keys(error.keyValue[0] === 'username')){
@@ -65,7 +66,7 @@ module.exports = {
         try {
             const { username } = req.body;
             const user = await User.findOne({username})
-
+            console.log(username)
             if(!user) {
                 return res.status(400).send({error: "No username found!"})
             }
@@ -74,11 +75,12 @@ module.exports = {
             await user.save();
 
             const resetUrl = `http://localhost:8080/resetpassword/${resetToken}`
-            
+
             const message = `
                 <h1> halo bry </h1>
                 <a href = ${resetUrl} clicktracking = off> ${resetUrl} </a>
             `;
+            
             try {
                 await sendEmail({
                     to: user.username,
@@ -89,7 +91,7 @@ module.exports = {
                 res.status(200).json({ success: true, data: "Email Sent" });
             }
 
-            catch(error) {
+            catch(err) {
                 console.log(err);
 
                 user.resetPasswordToken = undefined;
@@ -100,17 +102,29 @@ module.exports = {
                 return res.status(540).send({error: "Email could not be sent"})
             }
 
-        } catch(error) {
+        } catch(err) {
             return res.status(500).send({error: "Forgot password error"})
         }
     },
 
-    // async resetpassword(req, res) {
-    //     try {
-            
+    async resetpassword(req, res) {
+        const resetPasswordToken = crypto.createHash("sha256").update(req.params.resetToken).digest("hex");
 
-    //     } catch(error) {
-    //         return res.status(500).send({error: "Reset password error"})
-    //     }
-    // }
+        try {
+            const user = await User.findOne({
+                resetPasswordToken,
+                resetPasswordExpire: { $gt: Date.now() }
+            })    
+
+            if(!user) {
+                return res.status(500).send({error: "Link Error"})
+            }
+
+            await user.updateOne()
+
+            
+        } catch(error) {
+            return res.status(500).send({error: "Reset password error"})
+        }
+    }
 }

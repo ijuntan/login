@@ -2,21 +2,21 @@ const nodemailer = require('nodemailer')
 
 const sendEmail = (options) => {
     const transporter = nodemailer.createTransport({
-        service: 'gmail',
+        service: 'hotmail',
         auth: {
-            user: 'jj2023tt@gmail.com',
-            pass: 'blacksaga8'
+            user: 'juniortanaya@outlook.com',
+            pass: 'valhalla1099'
         }
     })
 
     const mailOptions = {
-        from: "jj2023tt@gmail.com",
-        to: "juniortanaya@gmail.com",
+        from: "juniortanaya@outlook.com",
+        to: options.to,
         subject: options.subject,
         html: options.text
     }
 
-    transporter.sendEmail(mailOptions, function(err, info) {
+    transporter.sendMail(mailOptions, function(err, info) {
         if(err) {
             console.log(err)
         } else {

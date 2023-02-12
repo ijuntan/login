@@ -14,7 +14,7 @@ const AuthService = {
     },
     forgotpassword(cred){
         return axios.post(`${API_URL}forgotpassword`, cred)
-    }
+    },
 }
 
 export default AuthService

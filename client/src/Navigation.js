@@ -16,7 +16,7 @@ export default function Navigation() {
                 <Route path = '/login' element = { <Login/> } />
                 <Route path = '/signup' element = { <Signup/> } />
                 <Route path = '/forgotpassword' element = { <ForgotPassword/> } />
-                <Route path = '/resetpassword' element = { <ResetPassword/> } />
+                <Route path = '/resetpassword/:resetToken' element = { <ResetPassword/> } />
                 <Route path = '/dash' element = { 
                     <AuthComponent>
                         <Dash/>
