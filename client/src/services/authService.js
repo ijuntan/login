@@ -12,8 +12,8 @@ const AuthService = {
     logout(){
         return localStorage.removeItem('token')
     },
-    getCurrentUser(){
-        return JSON.parse(localStorage.getItem('token'))
+    forgotpassword(cred){
+        return axios.post(`${API_URL}forgotpassword`, cred)
     }
 }
 

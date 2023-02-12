@@ -9,7 +9,8 @@ import {
     ListItemButton,
     ListItemIcon,
     ListItemText,
-    Box
+    Box,
+    Divider
 } from '@mui/material'
 import {
     Abc
@@ -43,7 +44,9 @@ const Dash = () => {
 
     return(
         <>
-        <HeaderDash/>
+        <header>
+            <HeaderDash/>
+        </header>
         <Drawer 
             sx = {{
             '& .MuiDrawer-paper': {
@@ -51,7 +54,11 @@ const Dash = () => {
           }}} 
           variant = "permanent" anchor = "left"
         >
-            <Box sx={{ overflow: 'auto' }}>
+            <Box>
+                <Typography variant = "h2" sx ={{paddingTop: '3vh', paddingBottom: '2vh'}}>
+                    Surat Kita
+                </Typography>
+                <Divider/>
                 <List>
                 {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
                     <ListItem key={text} disablePadding>

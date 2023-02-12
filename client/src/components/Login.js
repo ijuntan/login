@@ -119,6 +119,14 @@ const Login = () => {
                         ),
                     }}
                     />
+
+                    <Grid item container justifyContent="flex-start" rowSpacing={1}>
+                        <Link to = '/forgotpassword' style={{ textDecoration: 'none', left: '0px' }}>
+                            <Typography variant = 'h8' sx = {{ color:'gray'}}>
+                                Forgot Password?
+                            </Typography>
+                        </Link>
+                    </Grid>
                 </Grid>
                 
                 <Grid item>

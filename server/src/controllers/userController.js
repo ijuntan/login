@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const { User } = require('../models')
-const config = require('../config/config')
+const config = require('../config/config');
+const sendEmail = require('../services/sendEmail');
 
 function jwtSignUser(user) {
     const ONE_WEEK = 7 * 24 * 60 * 60
@@ -58,5 +59,58 @@ module.exports = {
         } catch(error) {
             return res.status(500).send({error: "Login function error"})
         }
-    }
+    },
+
+    async forgotpassword(req, res) {
+        try {
+            const { username } = req.body;
+            const user = await User.findOne({username})
+
+            if(!user) {
+                return res.status(400).send({error: "No username found!"})
+            }
+            
+            const resetToken = await user.getReset();
+            await user.save();
+
+            const resetUrl = `http://localhost:8080/resetpassword/${resetToken}`
+            
+            const message = `
+                <h1> halo bry </h1>
+                <a href = ${resetUrl} clicktracking = off> ${resetUrl} </a>
+            `;
+            try {
+                await sendEmail({
+                    to: user.username,
+                    subject: "Password Reset Request",
+                    text: message,
+                })
+
+                res.status(200).json({ success: true, data: "Email Sent" });
+            }
+
+            catch(error) {
+                console.log(err);
+
+                user.resetPasswordToken = undefined;
+                user.resetPasswordExpire = undefined;
+
+                await user.save();
+
+                return res.status(540).send({error: "Email could not be sent"})
+            }
+
+        } catch(error) {
+            return res.status(500).send({error: "Forgot password error"})
+        }
+    },
+
+    // async resetpassword(req, res) {
+    //     try {
+            
+
+    //     } catch(error) {
+    //         return res.status(500).send({error: "Reset password error"})
+    //     }
+    // }
 }
